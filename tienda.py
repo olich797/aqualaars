@@ -7,12 +7,6 @@ import matplotlib.pyplot as plt
 import io
 import json
 
-import subprocess
-
-installed_packages = subprocess.run(["pip", "list"], capture_output=True, text=True)
-print(installed_packages.stdout)
-
-
 # ✅ Obtener secretos desde Streamlit Cloud
 firebase_secrets = st.secrets["firebase"]
 cred_json = json.loads(json.dumps(firebase_secrets))
