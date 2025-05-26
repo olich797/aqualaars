@@ -15,7 +15,7 @@ cred_json = json.loads(json.dumps(firebase_secrets))
 cred = credentials.Certificate(cred_json)
 firebase_admin.initialize_app(cred)
 
-# ✅ Conectar a Firestore
+# ✅ Conectar a Firestores
 db = firestore.client()
 
 # 🔑 Verificar si el usuario está autenticado
