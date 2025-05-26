@@ -7,11 +7,8 @@ import matplotlib.pyplot as plt
 import io
 import json
 
-
 # ✅ Obtener secretos desde Streamlit Cloud
 firebase_secrets = st.secrets["firebase"]
-
-# ✅ Convertir a formato JSON
 cred_json = json.loads(json.dumps(firebase_secrets))
 
 # ✅ Inicializar Firebase con Secrets
@@ -20,7 +17,6 @@ firebase_admin.initialize_app(cred)
 
 # ✅ Conectar a Firestore
 db = firestore.client()
-
 
 # 🔑 Verificar si el usuario está autenticado
 if "autenticado" not in st.session_state:
