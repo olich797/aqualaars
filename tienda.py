@@ -7,18 +7,18 @@ import matplotlib.pyplot as plt
 import io
 import json
 
-# ✅ Convertir los Secrets en un diccionario estándar
+# ✅ Obtener los Secrets desde Streamlit Cloud
 firebase_secrets = dict(st.secrets["firebase"])
+firebase_secrets["private_key"] = firebase_secrets["private_key"].replace("\\n", "\n")  # 🔹 Corrige el formato de la clave privada
 
-# ✅ Corregir el formato de la clave privada
-firebase_secrets["private_key"] = firebase_secrets["private_key"].replace("\\n", "\n")
-
-# ✅ Inicializar Firebase con la clave privada corregida
-cred = credentials.Certificate(firebase_secrets)
-firebase_admin.initialize_app(cred)
+# ✅ Verificar si Firebase ya está inicializado
+if not firebase_admin._apps:
+    cred = credentials.Certificate(firebase_secrets)
+    firebase_admin.initialize_app(cred)
 
 # ✅ Conectar a Firestore
 db = firestore.client()
+
 
 # 🔑 Verificar si el usuario está autenticado
 if "autenticado" not in st.session_state:
