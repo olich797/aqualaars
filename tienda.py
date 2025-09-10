@@ -289,7 +289,7 @@ if st.session_state.pagina == "Proforma":
         nueva_lista = []
 
         for i, item in enumerate(st.session_state.productos_lista):
-            col1, col2, col3, col4 = st.columns(4)
+            col1, col2, col3, col4 = st.columns([2.5, 0.8, 1.2, 0.5])
 
             with col1:
                 st.write(item["Nombre"])
