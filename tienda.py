@@ -75,9 +75,9 @@ if st.session_state.pagina == "Inicio":
             productos_lista.append({
                 "Nombre": datos["nombre"],
                 "Cantidad": datos["cantidad"],
-                "Precio USD": round(datos["precio_usd"], 2),
-                "Precio BOB": round(datos["precio_usd"] * 6.96, 2),
-                "Precio BS": round(datos["precio_bs"], 0)
+                "Precio USD": round(float(datos["precio_usd"], 2)),
+                "Precio BOB": round(float(datos["precio_usd"] * 6.96, 2)),
+                "Precio BS": round(float(datos["precio_bs"], 2))
             })
 
     # 🔹 Mostrar tabla con productos filtrados
