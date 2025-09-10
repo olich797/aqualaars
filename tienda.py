@@ -275,7 +275,7 @@ if st.session_state.pagina == "Proforma":
         st.subheader("Lista de Productos en la Proforma")
 
         # 🔹 Mostrar encabezados una sola vez
-        col1, col2, col3, col4 = st.columns(4)
+        col1, col2, col3, col4 = st.columns([2.5, 0.8, 1.2, 0.5])
         with col1:
             st.markdown("**Producto**")
         with col2:
@@ -287,13 +287,13 @@ if st.session_state.pagina == "Proforma":
 
     # 🔁 Mostrar cada producto en una fila
         nueva_lista = []
-        
+
         for i, item in enumerate(st.session_state.productos_lista):
             col1, col2, col3, col4 = st.columns(4)
-        
+
             with col1:
                 st.write(item["Nombre"])
-        
+
             with col2:
                 item["Cantidad"] = st.number_input(
                     "", min_value=1, step=1,
@@ -301,7 +301,7 @@ if st.session_state.pagina == "Proforma":
                     key=f"cantidad_{i}",
                     label_visibility="collapsed"
                 )
-        
+
             with col3:
                 precio_unitario = float(item.get("Precio Unitario BOB", 0.0))
                 item["Precio Unitario BOB"] = st.number_input(
@@ -310,17 +310,17 @@ if st.session_state.pagina == "Proforma":
                     key=f"precio_bs_{i}",
                     label_visibility="collapsed"
                 )
-        
+
             item["Precio Total BOB"] = round(item["Cantidad"] * item["Precio Unitario BOB"], 2)
-        
+
             with col4:
                 eliminar = st.button(f"🗑 Eliminar", key=f"eliminar_{i}")
-            
+
             if not eliminar:
                 nueva_lista.append(item)
             else:
                 st.success(f"Producto '{item['Nombre']}' eliminado correctamente.")
-        
+
         # ✅ Actualizar la lista en session_state
         st.session_state.productos_lista = nueva_lista
 
