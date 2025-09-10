@@ -169,7 +169,7 @@ if st.session_state.pagina == "Inventario":
 
         # Mostrar tabla con edición en cada fila
         for index, item in df.iterrows():
-            col1, col2, col3, col4, col5, col6, col7 = st.columns([2.8, 0.8, 0.8, 0.8, 0.8, 1, 1])
+            col1, col2, col3, col4, col5, col6, col7 = st.columns([2.8, 0.9, 0.8, 0.8, 0.8, 1.1, 1.1])
 
             with col1:
                 st.write(item["Nombre"])
@@ -193,7 +193,8 @@ if st.session_state.pagina == "Inventario":
                     db.collection("inventario").document(item["ID"]).update({
                         "cantidad": cantidad_editada,
                         "precio_usd": precio_editado,
-                        "precio_bob": round(precio_editado * nuevo_tipo_cambio, 2)
+                        "precio_bob": round(precio_editado * nuevo_tipo_cambio, 2),
+                        "precio_bs": precio_editado_bs
                     })
                     st.success(f"✅ Producto '{item['Nombre']}' actualizado.")
 
