@@ -108,7 +108,7 @@ if st.session_state.pagina == "Inventario":
     cantidad = st.number_input("Cantidad", min_value=1, step=1)
     precio_usd = st.number_input("Precio Unitario en USD", min_value=0.01, step=0.01)
     precio_bob = round(precio_usd * nuevo_tipo_cambio, 2)
-    precio_bs = st.number_input("Precio Unitario en BS", min_value=0.01, step=0.01)
+    precio_bs = st.number_input("Precio Unitario en BS", min_value=1, step=1)
     
     if st.button("Agregar Producto"):
         db.collection("inventario").add({
@@ -143,7 +143,7 @@ if st.session_state.pagina == "Inventario":
     # 🔹 Mostrar tabla correctamente en filas alineadas
     if productos_lista:
 
-        col1, col2, col3, col4, col5, col6, col7 = st.columns([2.8, 0.8, 0.8, 0.8, 0.8, 1, 1])
+        col1, col2, col3, col4, col5, col6, col7 = st.columns([2.5, 0.9, 0.8, 0.8, 0.8, 1.1, 1.1])
         with col1:
             st.write("Nombre")
 
@@ -169,7 +169,7 @@ if st.session_state.pagina == "Inventario":
 
         # Mostrar tabla con edición en cada fila
         for index, item in df.iterrows():
-            col1, col2, col3, col4, col5, col6, col7 = st.columns([2.8, 0.9, 0.8, 0.8, 0.8, 1.1, 1.1])
+            col1, col2, col3, col4, col5, col6, col7 = st.columns([2.5, 0.9, 0.8, 0.8, 0.8, 1.1, 1.1])
 
             with col1:
                 st.write(item["Nombre"])
