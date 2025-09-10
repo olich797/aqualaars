@@ -76,7 +76,8 @@ if st.session_state.pagina == "Inicio":
                 "Nombre": datos["nombre"],
                 "Cantidad": datos["cantidad"],
                 "Precio USD": round(datos["precio_usd"], 2),
-                "Precio BOB": round(datos["precio_usd"] * 6.96, 2)
+                "Precio BOB": round(datos["precio_usd"] * 6.96, 2),
+                "Precio BS": round(datos["precio_bs"], 0)
             })
 
     # 🔹 Mostrar tabla con productos filtrados
