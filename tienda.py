@@ -108,7 +108,7 @@ if st.session_state.pagina == "Inventario":
     cantidad = st.number_input("Cantidad", min_value=1, step=1)
     precio_usd = st.number_input("Precio Unitario en USD", min_value=0.01, step=0.01)
     precio_bob = round(precio_usd * nuevo_tipo_cambio, 2)
-    precio_bs = st.number_input("Precio Unitario en BS", min_value=1, step=1)
+    precio_bs = st.number_input("Precio Unitario en BS", min_value=0.01, step=0.01)
     
     if st.button("Agregar Producto"):
         db.collection("inventario").add({
