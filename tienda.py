@@ -278,6 +278,7 @@ if st.session_state.pagina == "Proforma":
             col1, col2, col3, col4 = st.columns(4)
 
             with col1:
+                st.write("Producto")
                 st.write(item["Nombre"])
 
             with col2:
@@ -318,7 +319,6 @@ if st.session_state.pagina == "Proforma":
             st.success(f"✅ La proforma ha sido guardada en Firebase con ID: {proforma_id}")
 
 
-
         # ✅ Crear imagen con matplotlib (con tabla y gota de agua)
         fig, ax = plt.subplots(figsize=(10, 6))  # Ajustar tamaño para mejor distribución
 
@@ -351,6 +351,8 @@ if st.session_state.pagina == "Proforma":
 
         # Ocultar los ejes para un diseño más limpio
         ax.axis("off")
+        
+        st.pyplot(fig)
         
         # ✅ Guardar imagen en buffer como PDF
         buffer = io.BytesIO()
