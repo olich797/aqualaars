@@ -108,13 +108,15 @@ if st.session_state.pagina == "Inventario":
     cantidad = st.number_input("Cantidad", min_value=1, step=1)
     precio_usd = st.number_input("Precio Unitario en USD", min_value=0.01, step=0.01)
     precio_bob = round(precio_usd * nuevo_tipo_cambio, 2)
-
+    precio_bs = st.number_input("Precio Unitario en BS", min_value=0.01, step=0.01)
+    
     if st.button("Agregar Producto"):
         db.collection("inventario").add({
             "nombre": nombre,
             "cantidad": cantidad,
             "precio_usd": precio_usd,
-            "precio_bob": precio_bob
+            "precio_bob": precio_bob,
+            "precio_bs": precio_bs
         })
         st.success("Producto agregado correctamente")
 
@@ -134,13 +136,14 @@ if st.session_state.pagina == "Inventario":
                 "Nombre": datos["nombre"],
                 "Cantidad": datos["cantidad"],
                 "Precio USD": round(datos["precio_usd"], 2),
-                "Precio BOB": round(datos["precio_usd"] * nuevo_tipo_cambio, 2)
+                "Precio BOB": round(datos["precio_usd"] * nuevo_tipo_cambio, 2),
+                "Precio BS": datos["precio_bs"]
             })
 
     # 🔹 Mostrar tabla correctamente en filas alineadas
     if productos_lista:
 
-        col1, col2, col3, col4, col5, col6 = st.columns([2.8, 0.8, 0.8, 0.8, 1, 1])
+        col1, col2, col3, col4, col5, col6, col7 = st.columns([2.8, 0.8, 0.8, 0.8, 0.8, 1, 1])
         with col1:
             st.write("Nombre")
 
@@ -154,16 +157,19 @@ if st.session_state.pagina == "Inventario":
             st.write("BOB")
 
         with col5:
-            st.write("")
+            st.write("BS")
 
         with col6:
+            st.write("")
+
+        with col7:
             st.write("")
         
         df = pd.DataFrame(productos_lista)
 
         # Mostrar tabla con edición en cada fila
         for index, item in df.iterrows():
-            col1, col2, col3, col4, col5, col6 = st.columns([2.8, 0.8, 0.8, 0.8, 1, 1])
+            col1, col2, col3, col4, col5, col6, col7 = st.columns([2.8, 0.8, 0.8, 0.8, 0.8, 1, 1])
 
             with col1:
                 st.write(item["Nombre"])
@@ -178,6 +184,9 @@ if st.session_state.pagina == "Inventario":
                 st.write(f"{item['Precio BOB']}")
 
             with col5:
+                precio_editado_bs = st.number_input("", min_value=0.01, step=0.01, value=item["Precio BS"], key=f"preciobs_{item['ID']}", label_visibility="collapsed")
+            
+            with col6:
                 guardar_btn = st.button("Guardar", key=f"guardar_{item['ID']}")
 
                 if guardar_btn:
@@ -188,7 +197,7 @@ if st.session_state.pagina == "Inventario":
                     })
                     st.success(f"✅ Producto '{item['Nombre']}' actualizado.")
 
-            with col6:
+            with col7:
                 eliminar_btn = st.button("Eliminar", key=f"eliminar_{item['ID']}")
 
                 if eliminar_btn:
