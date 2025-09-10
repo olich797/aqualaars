@@ -184,7 +184,7 @@ if st.session_state.pagina == "Inventario":
                 st.write(f"{item['Precio BOB']}")
 
             with col5:
-                precio_editado_bs = st.number_input("", min_value=0.01, step=0.01, value=item["Precio BS"], key=f"preciobs_{item['ID']}", label_visibility="collapsed")
+                precio_editado_bs = st.number_input("", min_value=0.01, step=0.01, value=item["Precio BS"], key=f"precio_bs_{item['ID']}", label_visibility="collapsed")
             
             with col6:
                 guardar_btn = st.button("Guardar", key=f"guardar_{item['ID']}")
