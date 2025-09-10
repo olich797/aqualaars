@@ -286,8 +286,6 @@ if st.session_state.pagina == "Proforma":
             with col3:
                 item["Precio Unitario BOB"] = st.number_input(f"Precio Unitario", min_value=0.01, step=0.01, value=item["Precio Unitario BOB"], key=f"precio_bs_{i}")
 
-            item["Precio Total BOB"] = round(item["Cantidad"] * item["Precio Unitario BOB"], 2)
-
             with col4:
                 if st.button(f"🗑 Eliminar", key=f"eliminar_{i}"):
                     del st.session_state.productos_lista[i]
