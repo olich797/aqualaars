@@ -238,7 +238,7 @@ if st.session_state.pagina == "Proforma":
     producto_encontrado = next((p.to_dict() for p in productos_db if p.to_dict()["nombre"] == producto_inventario), None)
 
     # 🔹 Asignar precio correctamente si el producto existe
-    precio_unitario_inventario = round(producto_encontrado["precio_usd"] * 6.96, 2) if producto_encontrado else 0
+    precio_unitario_inventario = round(producto_encontrado["precio_bs"], 2) if producto_encontrado else 0
 
     cantidad_inventario = st.number_input("Cantidad", min_value=1, step=1, key="cantidad_inventario")
     precio_total_inventario = round(cantidad_inventario * precio_unitario_inventario, 2)
@@ -345,19 +345,16 @@ if st.session_state.pagina == "Proforma":
         # Ocultar los ejes para un diseño más limpio
         ax.axis("off")
         
-        # ✅ Guardar imagen en buffer para descargar
+        # ✅ Guardar imagen en buffer como PDF
         buffer = io.BytesIO()
-        plt.savefig(buffer, format="png", bbox_inches="tight")
+        plt.savefig(buffer, format="pdf", bbox_inches="tight")
         buffer.seek(0)
 
-        # ✅ Mostrar imagen en la interfaz
-        st.image(buffer)
-
-        # ✅ Botón de descarga
+        # ✅ Botón de descarga como PDF
         st.download_button(label="📥 Descargar Proforma",
-                           data=buffer,
-                           file_name="proforma.png",
-                           mime="image/png")
+                   data=buffer,
+                   file_name="proforma.pdf",
+                   mime="application/pdf")
         
     else:
         st.warning("No se han agregado productos a la proforma.")
