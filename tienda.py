@@ -273,7 +273,7 @@ if st.session_state.pagina == "Proforma":
     # 🔹 Mostrar tabla y modificar/eliminar productos
     if st.session_state.productos_lista:
         st.subheader("Lista de Productos en la Proforma")
-    
+
         # 🔹 Mostrar encabezados una sola vez
         col1, col2, col3, col4 = st.columns(4)
         with col1:
@@ -286,35 +286,43 @@ if st.session_state.pagina == "Proforma":
             st.markdown("**Eliminar**")
 
     # 🔁 Mostrar cada producto en una fila
-    for i, item in enumerate(st.session_state.productos_lista):
-        col1, col2, col3, col4 = st.columns(4)
-
-        with col1:
-            st.write(item["Nombre"])
-
-        with col2:
-            item["Cantidad"] = st.number_input(
-                "", min_value=1, step=1,
-                value=int(item["Cantidad"]),
-                key=f"cantidad_{i}",
-                label_visibility="collapsed"
-            )
-
-        with col3:
-            precio_unitario = float(item.get("Precio Unitario BOB", 0.0))
-            item["Precio Unitario BOB"] = st.number_input(
-                "", min_value=0.01, step=0.01,
-                value=precio_unitario,
-                key=f"precio_bs_{i}",
-                label_visibility="collapsed"
-            )
-
-        item["Precio Total BOB"] = round(item["Cantidad"] * item["Precio Unitario BOB"], 2)
-
-        with col4:
-            if st.button(f"🗑 Eliminar", key=f"eliminar_{i}"):
-                del st.session_state.productos_lista[i]
+        nueva_lista = []
+        
+        for i, item in enumerate(st.session_state.productos_lista):
+            col1, col2, col3, col4 = st.columns(4)
+        
+            with col1:
+                st.write(item["Nombre"])
+        
+            with col2:
+                item["Cantidad"] = st.number_input(
+                    "", min_value=1, step=1,
+                    value=int(item["Cantidad"]),
+                    key=f"cantidad_{i}",
+                    label_visibility="collapsed"
+                )
+        
+            with col3:
+                precio_unitario = float(item.get("Precio Unitario BOB", 0.0))
+                item["Precio Unitario BOB"] = st.number_input(
+                    "", min_value=0.01, step=0.01,
+                    value=precio_unitario,
+                    key=f"precio_bs_{i}",
+                    label_visibility="collapsed"
+                )
+        
+            item["Precio Total BOB"] = round(item["Cantidad"] * item["Precio Unitario BOB"], 2)
+        
+            with col4:
+                eliminar = st.button(f"🗑 Eliminar", key=f"eliminar_{i}")
+            
+            if not eliminar:
+                nueva_lista.append(item)
+            else:
                 st.success(f"Producto '{item['Nombre']}' eliminado correctamente.")
+        
+        # ✅ Actualizar la lista en session_state
+        st.session_state.productos_lista = nueva_lista
 
         total_proforma = sum([item["Precio Total BOB"] for item in st.session_state.productos_lista])
         st.write(f"**Total en BOB:** {round(total_proforma, 2)} BOB")
