@@ -284,7 +284,7 @@ if st.session_state.pagina == "Proforma":
                 item["Cantidad"] = st.number_input(f"Cantidad", min_value=1, step=1, value=item["Cantidad"], key=f"cantidad_{i}")
 
             with col3:
-                precio_unitario = float(item.get("Precio Unitario BOB", 0.0))  # conversión segura
+                precio_unitario = float(item.get("Precio Unitario BOB", 0.0)) 
                 item["Precio Unitario BOB"] = st.number_input(
                     f"Precio Unitario",
                     min_value=0.01,
@@ -293,7 +293,7 @@ if st.session_state.pagina == "Proforma":
                     key=f"precio_bs_{i}"
                 )
             
-
+            item["Precio Total BOB"] = round(item["Cantidad"] * item["Precio Unitario BOB"], 2)
 
             with col4:
                 if st.button(f"🗑 Eliminar", key=f"eliminar_{i}"):
