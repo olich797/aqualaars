@@ -5,12 +5,16 @@ def filtrar_productos_por_nombre(productos, nombre):
 def calcular_precio_bob(precio_usd, tipo_cambio):
     return round(precio_usd * tipo_cambio, 2)
 
-def inicializar_firebase(secrets):
+def inicializar_firebase(secrets_raw):
     import firebase_admin
     from firebase_admin import credentials, firestore
 
+    # Crear una copia modificable
+    secrets = dict(secrets_raw)
     secrets["private_key"] = secrets["private_key"].replace("\\n", "\n")
+
     if not firebase_admin._apps:
         cred = credentials.Certificate(secrets)
         firebase_admin.initialize_app(cred)
+
     return firestore.client()
