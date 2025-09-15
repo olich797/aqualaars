@@ -96,3 +96,31 @@ def mostrar_inventario(db):
 
     if st.button("🔙 Volver al inicio"):
         st.session_state.pagina = "Inicio"
+        
+def mostrar_busqueda_inicial(db):
+    import streamlit as st
+    import pandas as pd
+
+    st.subheader("🔍 Buscar productos desde el inicio")
+    busqueda = st.text_input("Ingrese el nombre del producto")
+
+    productos = db.collection("inventario").stream()
+    productos_lista = []
+
+    for producto in productos:
+        datos = producto.to_dict()
+        if busqueda.lower() in datos["nombre"].lower():
+            productos_lista.append({
+                "Nombre": datos["nombre"],
+                "Cantidad": datos["cantidad"],
+                "Precio USD": round(datos["precio_usd"], 2),
+                "Precio BOB": round(datos["precio_usd"] * 6.96, 2),
+                "Precio BS": round(datos["precio_bs"], 2)
+            })
+
+    if productos_lista:
+        df = pd.DataFrame(productos_lista)
+        st.table(df)
+    else:
+        st.warning("No se encontraron productos.")
+

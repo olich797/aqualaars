@@ -7,6 +7,8 @@ from navigation import mostrar_menu
 from inventario import mostrar_inventario
 from proforma import generar_proforma
 from reporte import mostrar_reporte
+from inventario import mostrar_inventario, mostrar_busqueda_inicial
+
 
 db = inicializar_firebase(st.secrets["firebase"])
 
@@ -22,6 +24,8 @@ if "pagina" not in st.session_state:
 
 if st.session_state.pagina == "Inicio":
     mostrar_menu()
+    mostrar_busqueda_inicial(db)
+
 
 if st.session_state.pagina == "Inventario":
     mostrar_inventario(db)
