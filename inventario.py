@@ -1,4 +1,3 @@
-# inventario.py
 import streamlit as st
 import pandas as pd
 
@@ -73,14 +72,10 @@ def mostrar_inventario(db):
             with col1:
                 st.write(item["Nombre"])
             with col2:
-                if item["Cantidad"] >= 1:
-                    cantidad_editada = st.number_input(
-                        "", min_value=0, step=1, value=item["Cantidad"],
-                        key=f"cantidad_{item['ID']}", label_visibility="collapsed"
-                    )
-                else:
-                    st.warning(f"⚠️ '{item['Nombre']}' tiene cantidad 0.")
-                    cantidad_editada = 0
+                cantidad_editada = st.number_input(
+                    "", min_value=0, step=1, value=item["Cantidad"],
+                    key=f"cantidad_{item['ID']}", label_visibility="collapsed"
+                )
             with col3:
                 precio_editado = st.number_input(
                     "", min_value=0.01, step=0.01, value=item["Precio USD"],
