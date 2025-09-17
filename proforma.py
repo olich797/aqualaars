@@ -97,6 +97,7 @@ def generar_proforma(db):
             fig, ax = plt.subplots(figsize=(10, 6))
             ax.set_title("Proforma", fontsize=24, fontweight="bold")
             ax.text(0.5, 0.5, "Aqualaars", font="Arial", fontweight="bold", fontsize=90, color="#00BFFF", alpha=0.2, ha="center", va="center", transform=ax.transAxes)
+            ax.text(0.5, 0.45, "Todo para su piscina", font="Arial", fontsize=14, color="#0077CC", ha="center", va="center", transform=ax.transAxes)
             ax.text(0, 0.85, f"Nombre: {nombre_cliente}         CI/NIT: {ci_nit}", fontsize=12)
             ax.text(0, 0.78, f"Fecha emisión: {fecha_actual}", fontsize=12)
             ax.text(0, 0.71, f"Fecha vencimiento: {fecha_vencimiento}", fontsize=12)
