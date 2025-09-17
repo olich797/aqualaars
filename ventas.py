@@ -69,7 +69,9 @@ def registrar_venta(db):
     # 🧾 Mostrar productos agregados
     if st.session_state.productos_venta:
         st.subheader("🧺 Productos en la Venta")
-        df = pd.DataFrame(st.session_state.productos_venta)
+
+        columnas_visibles = ["Nombre", "Cantidad", "Precio Unitario BOB", "Precio Total BOB"]
+        df = pd.DataFrame(st.session_state.productos_venta)[columnas_visibles]
         st.table(df)
 
         total_venta = sum([item["Precio Total BOB"] for item in st.session_state.productos_venta])
