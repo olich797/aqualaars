@@ -70,14 +70,29 @@ def mostrar_inventario(db):
 
         for index, item in df.iterrows():
             col1, col2, col3, col4, col5, col6, col7 = st.columns([2.5, 0.9, 0.8, 0.8, 0.8, 1.1, 1.1])
-            with col1: st.write(item["Nombre"])
+            with col1:
+                st.write(item["Nombre"])
             with col2:
-                cantidad_editada = st.number_input("", min_value=1, step=1, value=item["Cantidad"], key=f"cantidad_{item['ID']}", label_visibility="collapsed")
+                if item["Cantidad"] >= 1:
+                    cantidad_editada = st.number_input(
+                        "", min_value=1, step=1, value=item["Cantidad"],
+                        key=f"cantidad_{item['ID']}", label_visibility="collapsed"
+                    )
+                else:
+                    st.warning(f"⚠️ '{item['Nombre']}' tiene cantidad 0.")
+                    cantidad_editada = 0
             with col3:
-                precio_editado = st.number_input("", min_value=0.01, step=0.01, value=item["Precio USD"], key=f"precio_{item['ID']}", label_visibility="collapsed")
-            with col4: st.write(f"{item['Precio BOB']}")
+                precio_editado = st.number_input(
+                    "", min_value=0.01, step=0.01, value=item["Precio USD"],
+                    key=f"precio_{item['ID']}", label_visibility="collapsed"
+                )
+            with col4:
+                st.write(f"{item['Precio BOB']}")
             with col5:
-                precio_editado_bs = st.number_input("", min_value=0.01, step=0.01, value=item["Precio BS"], key=f"precio_bs_{item['ID']}", label_visibility="collapsed")
+                precio_editado_bs = st.number_input(
+                    "", min_value=0.01, step=0.01, value=item["Precio BS"],
+                    key=f"precio_bs_{item['ID']}", label_visibility="collapsed"
+                )
             with col6:
                 if st.button("Guardar", key=f"guardar_{item['ID']}"):
                     db.collection("inventario").document(item["ID"]).update({
@@ -96,11 +111,8 @@ def mostrar_inventario(db):
 
     if st.button("🔙 Volver al inicio"):
         st.session_state.pagina = "Inicio"
-        
-def mostrar_busqueda_inicial(db):
-    import streamlit as st
-    import pandas as pd
 
+def mostrar_busqueda_inicial(db):
     st.subheader("🔍 Buscar productos desde el inicio")
     busqueda = st.text_input("Ingrese el nombre del producto")
 
@@ -123,4 +135,3 @@ def mostrar_busqueda_inicial(db):
         st.table(df)
     else:
         st.warning("No se encontraron productos.")
-

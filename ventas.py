@@ -25,12 +25,7 @@ def registrar_venta(db):
     precio_unitario = producto_info.to_dict()["precio_bs"] if producto_info else 0
 
     if cantidad_disponible >= 1:
-        cantidad_venta = st.number_input(
-            "Cantidad a vender",
-            min_value=1,
-            max_value=cantidad_disponible,
-            step=1
-        )
+        cantidad_venta = st.number_input("Cantidad a vender", min_value=1, max_value=cantidad_disponible, step=1)
     else:
         st.warning(f"⚠️ No hay stock disponible para '{producto_seleccionado}'.")
         cantidad_venta = None
@@ -66,13 +61,47 @@ def registrar_venta(db):
             })
             st.success(f"Producto manual '{nombre_manual}' agregado a la venta.")
 
-    # 🧾 Mostrar productos agregados
+    # 🧾 Mostrar productos agregados con edición y eliminación
     if st.session_state.productos_venta:
         st.subheader("🧺 Productos en la Venta")
 
-        columnas_visibles = ["Nombre", "Cantidad", "Precio Unitario BOB", "Precio Total BOB"]
-        df = pd.DataFrame(st.session_state.productos_venta)[columnas_visibles]
-        st.table(df)
+        nueva_lista = []
+        for i, item in enumerate(st.session_state.productos_venta):
+            col1, col2, col3, col4, col5 = st.columns([2.5, 0.8, 1.1, 1.1, 1.1])
+
+            with col1:
+                st.write(item["Nombre"])
+
+            with col2:
+                cantidad_editada = st.number_input(
+                    "", min_value=1, step=1, value=int(item["Cantidad"]),
+                    key=f"cantidad_{i}", label_visibility="collapsed"
+                )
+
+            with col3:
+                precio_editado = st.number_input(
+                    "", min_value=0.01, step=0.01, value=float(item["Precio Unitario BOB"]),
+                    key=f"precio_{i}", label_visibility="collapsed"
+                )
+
+            precio_total = round(cantidad_editada * precio_editado, 2)
+
+            with col4:
+                if st.button("Guardar", key=f"guardar_{i}"):
+                    item["Cantidad"] = cantidad_editada
+                    item["Precio Unitario BOB"] = precio_editado
+                    item["Precio Total BOB"] = precio_total
+                    st.success(f"✅ Producto '{item['Nombre']}' actualizado.")
+
+            with col5:
+                eliminar = st.button("Eliminar", key=f"eliminar_{i}")
+                if eliminar:
+                    st.success(f"🗑 Producto '{item['Nombre']}' eliminado.")
+                    continue  # No lo agregamos a la nueva lista
+
+            nueva_lista.append(item)
+
+        st.session_state.productos_venta = nueva_lista
 
         total_venta = sum([item["Precio Total BOB"] for item in st.session_state.productos_venta])
         st.write(f"**Total de la venta:** {round(total_venta, 2)} BOB")
@@ -89,7 +118,6 @@ def registrar_venta(db):
 
             db.collection("ventas").document(venta_id).set(venta_data)
 
-            # 🔄 Actualizar inventario solo para productos no manuales
             for item in st.session_state.productos_venta:
                 if not item.get("manual") and item["ID"]:
                     producto_ref = db.collection("inventario").document(item["ID"])
