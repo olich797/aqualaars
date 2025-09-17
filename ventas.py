@@ -1,93 +1,86 @@
-# ventas.py
+# reporte_ventas.py
 import streamlit as st
 import pandas as pd
-from datetime import datetime
+import matplotlib.pyplot as plt
+import io
 
-def registrar_venta(db):
-    st.header("🛒 Registrar Venta")
+def mostrar_reporte_ventas(db):
+    st.header("📊 Reporte de Ventas")
 
-    nombre_cliente = st.text_input("Nombre del Cliente")
-    ci_nit = st.text_input("CI o NIT")
-    fecha_venta = st.date_input("Fecha de la venta", value=datetime.today())
+    # 🔍 Filtros de búsqueda
+    busqueda_nombre = st.text_input("Buscar por nombre del cliente")
+    busqueda_ci = st.text_input("Buscar por CI/NIT")
 
-    if "productos_venta" not in st.session_state:
-        st.session_state.productos_venta = []
+    # 🔄 Obtener ventas desde Firebase
+    ventas = db.collection("ventas").stream()
+    ventas_lista = []
 
-    # 🔍 Selección desde inventario
-    productos_db = list(db.collection("inventario").stream())
-    nombres_productos = [p.to_dict()["nombre"] for p in productos_db]
+    for venta in ventas:
+        datos = venta.to_dict()
+        ventas_lista.append({
+            "ID": venta.id,
+            "Fecha Venta": datos.get("fecha_venta", ""),
+            "Nombre Cliente": datos.get("nombre_cliente", ""),
+            "CI/NIT": datos.get("ci_nit", ""),
+            "Total BOB": datos.get("total", 0),
+            "Productos": datos.get("productos", [])
+        })
 
-    st.subheader("📦 Seleccionar Producto del Inventario")
-    producto_seleccionado = st.selectbox("Producto", [""] + nombres_productos)
+    # 🔍 Aplicar filtros
+    ventas_filtradas = ventas_lista
 
-    producto_info = next((p for p in productos_db if p.to_dict()["nombre"] == producto_seleccionado), None)
-    cantidad_disponible = producto_info.to_dict()["cantidad"] if producto_info else 0
-    precio_unitario = producto_info.to_dict()["precio_bs"] if producto_info else 0
+    if busqueda_nombre.strip():
+        ventas_filtradas = [v for v in ventas_filtradas if busqueda_nombre.lower() in v["Nombre Cliente"].lower()]
 
-    cantidad_venta = st.number_input("Cantidad a vender", min_value=1, max_value=cantidad_disponible, step=1)
+    if busqueda_ci.strip():
+        ventas_filtradas = [v for v in ventas_filtradas if busqueda_ci in v["CI/NIT"]]
 
-    if st.button("Agregar al carrito desde inventario"):
-        if producto_seleccionado:
-            st.session_state.productos_venta.append({
-                "ID": producto_info.id,
-                "Nombre": producto_seleccionado,
-                "Cantidad": cantidad_venta,
-                "Precio Unitario BOB": precio_unitario,
-                "Precio Total BOB": round(precio_unitario * cantidad_venta, 2),
-                "manual": False
-            })
-            st.success(f"Producto '{producto_seleccionado}' agregado a la venta.")
+    # 📋 Mostrar tabla
+    if ventas_filtradas:
+        df_ventas = pd.DataFrame(ventas_filtradas, columns=["Fecha Venta", "Nombre Cliente", "CI/NIT", "Total BOB"])
+        st.table(df_ventas)
 
-    # ✍️ Ingreso manual de productos
-    st.subheader("✏️ Agregar Producto Manualmente")
-    nombre_manual = st.text_input("Nombre del producto manual")
-    cantidad_manual = st.number_input("Cantidad", min_value=1, step=1, key="cantidad_manual")
-    precio_manual = st.number_input("Precio Unitario BOB", min_value=0.01, step=0.01, key="precio_manual")
-    precio_total_manual = round(cantidad_manual * precio_manual, 2)
+        # 🔘 Selector de venta
+        venta_seleccionada = st.selectbox("Selecciona una venta para ver el comprobante", [v["ID"] for v in ventas_filtradas])
 
-    if st.button("Agregar producto manual"):
-        if nombre_manual:
-            st.session_state.productos_venta.append({
-                "ID": None,
-                "Nombre": nombre_manual,
-                "Cantidad": cantidad_manual,
-                "Precio Unitario BOB": precio_manual,
-                "Precio Total BOB": precio_total_manual,
-                "manual": True
-            })
-            st.success(f"Producto manual '{nombre_manual}' agregado a la venta.")
+        if venta_seleccionada:
+            datos_venta = next((v for v in ventas_filtradas if v["ID"] == venta_seleccionada), None)
 
-    # 🧾 Mostrar productos agregados
-    if st.session_state.productos_venta:
-        st.subheader("🧺 Productos en la Venta")
-        df = pd.DataFrame(st.session_state.productos_venta)
-        st.table(df)
+            if datos_venta:
+                fig, ax = plt.subplots(figsize=(10, 6))
+                ax.set_title("Comprobante de Venta", fontsize=18, fontweight="bold")
 
-        total_venta = sum([item["Precio Total BOB"] for item in st.session_state.productos_venta])
-        st.write(f"**Total de la venta:** {round(total_venta, 2)} BOB")
+                # 💧 Marca de agua
+                ax.text(0.5, 0.5, "Aqualaars", font="Arial", fontweight="bold", fontsize=90,
+                        color="#00BFFF", alpha=0.2, ha="center", va="center", transform=ax.transAxes)
 
-        if st.button("💾 Registrar Venta"):
-            venta_id = f"venta_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-            venta_data = {
-                "nombre_cliente": nombre_cliente,
-                "ci_nit": ci_nit,
-                "fecha_venta": fecha_venta.strftime("%Y-%m-%d"),
-                "productos": st.session_state.productos_venta,
-                "total": round(total_venta, 2)
-            }
+                # 🧾 Datos del cliente
+                ax.text(0, 0.85, f"Cliente: {datos_venta['Nombre Cliente']}         CI/NIT: {datos_venta['CI/NIT']}", fontsize=12)
+                ax.text(0, 0.78, f"Fecha de venta: {datos_venta['Fecha Venta']}", fontsize=12)
 
-            db.collection("ventas").document(venta_id).set(venta_data)
+                # 📦 Tabla de productos
+                col_labels = ["Producto", "Cantidad", "Precio Unitario BOB", "Precio Total BOB"]
+                table_data = [[item["Nombre"], item["Cantidad"], item["Precio Unitario BOB"], item["Precio Total BOB"]] for item in datos_venta["Productos"]]
 
-            # 🔄 Actualizar inventario solo para productos no manuales
-            for item in st.session_state.productos_venta:
-                if not item.get("manual") and item["ID"]:
-                    producto_ref = db.collection("inventario").document(item["ID"])
-                    producto_actual = producto_ref.get().to_dict()
-                    nueva_cantidad = producto_actual["cantidad"] - item["Cantidad"]
-                    producto_ref.update({"cantidad": nueva_cantidad})
+                tabla = ax.table(cellText=table_data, colLabels=col_labels, cellLoc="center", loc="center",
+                                 colWidths=[0.50, 0.13, 0.18, 0.18])
+                tabla.auto_set_font_size(False)
+                tabla.set_fontsize(10)
+                tabla.scale(1.2, 1.2)
 
-            st.success(f"✅ Venta registrada con ID: {venta_id}")
-            st.session_state.productos_venta = []
+                # 💰 Total
+                ax.text(0, -0.02, f"Total: {round(datos_venta['Total BOB'], 2)} BOB", fontsize=14, fontweight="bold")
+                ax.axis("off")
+
+                # 🖼 Mostrar imagen
+                buffer = io.BytesIO()
+                plt.savefig(buffer, format="png", bbox_inches="tight")
+                buffer.seek(0)
+                st.image(buffer)
+            else:
+                st.warning("No se encontraron productos en esta venta.")
+    else:
+        st.warning("No se encontraron ventas con esos criterios.")
 
     if st.button("🔙 Volver al inicio"):
         st.session_state.pagina = "Inicio"

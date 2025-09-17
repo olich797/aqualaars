@@ -25,7 +25,6 @@ if st.session_state.pagina == "Inicio":
     mostrar_menu()
     mostrar_busqueda_inicial(db)
 
-
 if st.session_state.pagina == "Inventario":
     mostrar_inventario(db)
 
