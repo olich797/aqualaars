@@ -75,7 +75,7 @@ def mostrar_inventario(db):
             with col2:
                 if item["Cantidad"] >= 1:
                     cantidad_editada = st.number_input(
-                        "", min_value=1, step=1, value=item["Cantidad"],
+                        "", min_value=0, step=1, value=item["Cantidad"],
                         key=f"cantidad_{item['ID']}", label_visibility="collapsed"
                     )
                 else:
