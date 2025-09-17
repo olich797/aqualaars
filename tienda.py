@@ -1,6 +1,4 @@
 import streamlit as st
-import pandas as pd
-import matplotlib.pyplot as plt
 from utils import inicializar_firebase
 from auth import mostrar_login
 from navigation import mostrar_menu
@@ -8,7 +6,8 @@ from inventario import mostrar_inventario
 from proforma import generar_proforma
 from reporte import mostrar_reporte
 from inventario import mostrar_inventario, mostrar_busqueda_inicial
-
+from ventas import registrar_venta
+from reporte_ventas import mostrar_reporte_ventas
 
 db = inicializar_firebase(st.secrets["firebase"])
 
@@ -35,3 +34,9 @@ if st.session_state.pagina == "Proforma":
 
 if st.session_state.pagina == "Reporte":
     mostrar_reporte(db)
+    
+if st.session_state.pagina == "Venta":
+    registrar_venta(db)
+
+if st.session_state.pagina == "Reporte Ventas":
+    mostrar_reporte_ventas(db)
