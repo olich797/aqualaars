@@ -4,11 +4,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import io
 
-if "rol" not in st.session_state or st.session_state.rol not in ["admin", "user"]:
-    st.warning("⚠️ No tienes permisos para acceder a esta sección.")
-    st.stop()
-
 def mostrar_reporte_ventas(db):
+    if "rol" not in st.session_state or st.session_state.rol not in ["admin", "user"]:
+        st.warning("⚠️ No tienes permisos para acceder a esta sección.")
+        st.stop()
     st.header("📊 Reporte de Ventas")
 
     busqueda_nombre = st.text_input("Buscar por nombre del cliente")

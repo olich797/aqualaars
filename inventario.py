@@ -1,11 +1,12 @@
 import streamlit as st
 import pandas as pd
 
-if "rol" not in st.session_state or st.session_state.rol not in ["admin", "user"]:
-    st.warning("⚠️ No tienes permisos para acceder a esta sección.")
-    st.stop()
-
 def mostrar_inventario(db):
+    
+    if "rol" not in st.session_state or st.session_state.rol not in ["admin", "user"]:
+        st.warning("⚠️ No tienes permisos para acceder a esta sección.")
+        st.stop()
+    
     st.header("📦 Inventario")
 
     # 🛠 Sidebar (Configuración)
