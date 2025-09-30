@@ -16,7 +16,7 @@ def mostrar_menu():
         if st.button("📊 Reporte Proformas"):
             st.session_state.pagina = "Reporte"
     with col4:
-        if st.button("  🛒 Venta  "):
+        if st.button("🛒 Venta"):
             st.session_state.pagina = "Venta"
     with col5:
         if st.button("📈 Reporte Ventas"):
