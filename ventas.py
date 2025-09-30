@@ -3,9 +3,10 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 
-if st.session_state.rol not in ["admin", "user"]:
-    st.warning("⚠️ Acceso restringido para tu rol.")
+if "rol" not in st.session_state or st.session_state.rol not in ["admin", "user"]:
+    st.warning("⚠️ No tienes permisos para acceder a esta sección.")
     st.stop()
+
 def registrar_venta(db):
     st.header("🛒 Registrar Venta")
 

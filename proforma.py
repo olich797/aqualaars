@@ -5,9 +5,10 @@ import matplotlib.pyplot as plt
 import io
 from datetime import datetime, timedelta
 
-if st.session_state.rol not in ["admin", "user"]:
-    st.warning("⚠️ Acceso restringido para tu rol.")
+if "rol" not in st.session_state or st.session_state.rol not in ["admin", "user"]:
+    st.warning("⚠️ No tienes permisos para acceder a esta sección.")
     st.stop()
+
 def generar_proforma(db):
     st.header("📝 Generar Proforma")
 
