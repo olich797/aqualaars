@@ -3,7 +3,7 @@ import pandas as pd
 
 def mostrar_inventario(db):
     
-    if "rol" not in st.session_state or st.session_state.rol not in ["admin", "user"]:
+    if "rol" not in st.session_state or st.session_state.rol not in ["admin"]:
         st.warning("⚠️ No tienes permisos para acceder a esta sección.")
         st.stop()
     
