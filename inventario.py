@@ -1,6 +1,10 @@
 import streamlit as st
 import pandas as pd
 
+if st.session_state.rol not in ["admin", "user"]:
+    st.warning("⚠️ Acceso restringido para tu rol.")
+    st.stop()
+
 def mostrar_inventario(db):
     st.header("📦 Inventario")
 

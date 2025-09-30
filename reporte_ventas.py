@@ -4,6 +4,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import io
 
+if st.session_state.rol not in ["admin", "user"]:
+    st.warning("⚠️ Acceso restringido para tu rol.")
+    st.stop()
 def mostrar_reporte_ventas(db):
     st.header("📊 Reporte de Ventas")
 
