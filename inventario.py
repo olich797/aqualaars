@@ -5,6 +5,9 @@ def mostrar_inventario(db):
     
     if "rol" not in st.session_state or st.session_state.rol not in ["admin"]:
         st.warning("⚠️ No tienes permisos para acceder a esta sección.")
+        if st.button("🔙 Volver al inicio"):
+            st.session_state.pagina = "Inicio"
+            st.rerun()  
         return
     
     st.header("📦 Inventario")
