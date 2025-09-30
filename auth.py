@@ -20,6 +20,3 @@ def mostrar_login(db):
                 st.error("Contraseña incorrecta.")
         else:
             st.error("Usuario no registrado.")
-        return False
-
-    return True

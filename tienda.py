@@ -15,8 +15,8 @@ if "autenticado" not in st.session_state:
     st.session_state.autenticado = False
 
 if not st.session_state.autenticado:
-    if mostrar_login():
-        st.stop()
+    mostrar_login(db)
+    st.stop()
 
 if "pagina" not in st.session_state:
     st.session_state.pagina = "Inicio"
