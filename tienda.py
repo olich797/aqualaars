@@ -9,11 +9,6 @@ from inventario import mostrar_inventario, mostrar_busqueda_inicial
 from ventas import registrar_venta
 from reporte_ventas import mostrar_reporte_ventas
 
-if "rol" not in st.session_state or st.session_state.rol not in ["admin", "user"]:
-    st.warning("⚠️ No tienes permisos para acceder a esta sección.")
-    st.stop()
-
-
 db = inicializar_firebase(st.secrets["firebase"])
 
 if "autenticado" not in st.session_state:
