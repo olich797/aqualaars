@@ -63,6 +63,9 @@ def mostrar_inventario(db):
                 "Precio BS": datos["precio_bs"]
             })
 
+    # 🔠 Ordenar alfabéticamente por nombre
+    productos_lista.sort(key=lambda x: x["Nombre"].lower())
+
     if productos_lista:
         col1, col2, col3, col4, col5, col6, col7 = st.columns([2.5, 0.9, 0.8, 0.8, 0.8, 1.1, 1.1])
         with col1: st.write("Nombre")
@@ -78,7 +81,11 @@ def mostrar_inventario(db):
         for index, item in df.iterrows():
             col1, col2, col3, col4, col5, col6, col7 = st.columns([2.5, 0.9, 0.8, 0.8, 0.8, 1.1, 1.1])
             with col1:
-                st.write(item["Nombre"])
+                nombre = st.text_input(
+                    "", value=item["Nombre"],
+                    key=f"nombre_{item['ID']}", label_visibility="collapsed"
+                )
+
             with col2:
                 cantidad_editada = st.number_input(
                     "", min_value=0, step=1, value=item["Cantidad"],
@@ -99,6 +106,7 @@ def mostrar_inventario(db):
             with col6:
                 if st.button("Guardar", key=f"guardar_{item['ID']}"):
                     db.collection("inventario").document(item["ID"]).update({
+                        "nombre": nombre,
                         "cantidad": cantidad_editada,
                         "precio_usd": precio_editado,
                         "precio_bob": round(precio_editado * nuevo_tipo_cambio, 2),
