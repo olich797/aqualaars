@@ -141,6 +141,9 @@ def mostrar_busqueda_inicial(db):
                 "Precio BS": round(datos["precio_bs"], 2)
             })
 
+    # 🔠 Ordenar alfabéticamente por nombre
+    productos_lista.sort(key=lambda x: x["Nombre"].lower())
+
     if productos_lista:
         df = pd.DataFrame(productos_lista)
         st.table(df)
