@@ -67,7 +67,7 @@ def mostrar_inventario(db):
     productos_lista.sort(key=lambda x: x["Nombre"].lower())
 
     if productos_lista:
-        col1, col2, col3, col4, col5, col6, col7 = st.columns([2.8, 0.9, 0.8, 0.7, 0.8, 1, 1])
+        col1, col2, col3, col4, col5, col6, col7 = st.columns([2.5, 0.9, 0.8, 0.8, 0.8, 1.1, 1.1])
         with col1: st.write("Nombre")
         with col2: st.write("Cantidad")
         with col3: st.write("USD")
@@ -79,7 +79,7 @@ def mostrar_inventario(db):
         df = pd.DataFrame(productos_lista)
 
         for index, item in df.iterrows():
-            col1, col2, col3, col4, col5, col6, col7 = st.columns([2.8, 0.9, 0.8, 0.7, 0.8, 1, 1])
+            col1, col2, col3, col4, col5, col6, col7 = st.columns([2.5, 0.9, 0.8, 0.8, 0.8, 1.1, 1.1])
             with col1:
                 nombre = st.text_input(
                     "", value=item["Nombre"],
