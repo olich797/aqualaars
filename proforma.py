@@ -97,7 +97,7 @@ def generar_proforma(db):
             db.collection("proformas").document(proforma_id).set(proforma_data)
             st.success(f"✅ La proforma ha sido guardada en Firebase con ID: {proforma_id}")
 
-            fig, ax = plt.subplots(figsize=(7.5, 7))  # Carta vertical
+            fig, ax = plt.subplots(figsize=(7.5, 7))  
 
             ax.set_title("Proforma", fontsize=20, fontweight="bold", pad=10)
 
@@ -118,7 +118,7 @@ def generar_proforma(db):
             tabla.auto_set_font_size(False)
             tabla.set_fontsize(8)
             tabla.scale(1.2, 1.2)
-            ax.text(0, 0.23, f"Total: {round(total_proforma, 2)} BOB", fontsize=12, fontweight="bold")
+            ax.text(0, 0.20, f"Total: {round(total_proforma, 2)} BOB", fontsize=12, fontweight="bold")
             ax.axis("off")
             st.pyplot(fig)
 
