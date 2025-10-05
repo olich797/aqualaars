@@ -123,6 +123,26 @@ def generar_proforma(db):
     else:
         st.warning("No se han agregado productos a la proforma.")
 
+    import urllib.parse
+
+    st.subheader("📤 Enviar Proforma por WhatsApp")
+    
+    numero_whatsapp = st.text_input("Número de WhatsApp del cliente (ej. 5917XXXXXXX)", key="whatsapp_cliente")
+    
+    # Generar mensaje resumido
+    mensaje = f"📝 *Proforma Aqualaars*\n"
+    mensaje += f"👤 Cliente: {nombre_cliente}\n🆔 CI/NIT: {ci_nit}\n📅 Emisión: {fecha_actual.strftime('%Y-%m-%d')}\n📅 Vencimiento: {fecha_vencimiento.strftime('%Y-%m-%d')}\n\n"
+    mensaje += "📦 Productos:\n"
+    for item in st.session_state.productos_lista:
+        mensaje += f"- {item['Nombre']} x{item['Cantidad']} = {item['Precio Total BOB']} Bs\n"
+    mensaje += f"\n💰 *Total: {round(total_proforma, 2)} Bs*"
+    
+    # Botón para abrir WhatsApp
+    if numero_whatsapp and st.button("📲 Enviar por WhatsApp"):
+        mensaje_codificado = urllib.parse.quote(mensaje)
+        enlace = f"https://wa.me/{numero_whatsapp}?text={mensaje_codificado}"
+        st.markdown(f"[Abrir WhatsApp]({enlace})", unsafe_allow_html=True)
+
     if st.button("🆕 Nueva Proforma"):
         st.session_state.nombre_cliente = ""
         st.session_state.ci_nit = ""
