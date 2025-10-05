@@ -104,7 +104,7 @@ def generar_proforma(db):
             # Marca de agua
             ax.text(0.5, 0.5, "Aqualaars", font="Arial", fontweight="bold", fontsize=90,
                     color="#00BFFF", alpha=0.2, ha="center", va="center", transform=ax.transAxes)
-            ax.text(0.60, 0.20, "Todo para su piscina", font="Arial", fontweight="bold", fontsize=30,
+            ax.text(0.70, 0.20, "Todo para su piscina", font="Arial", fontweight="bold", fontsize=30,
                     color="#00BFFF", alpha=0.2, ha="center", va="center", transform=ax.transAxes)
 
             # Datos del cliente (más compactos)
