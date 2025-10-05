@@ -1,14 +1,15 @@
-# proforma.py
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import io
+import urllib.parse
 from datetime import datetime, timedelta
 
 def generar_proforma(db):
     if "rol" not in st.session_state or st.session_state.rol not in ["admin", "user"]:
         st.warning("⚠️ No tienes permisos para acceder a esta sección.")
         st.stop()
+
     st.header("📝 Generar Proforma")
 
     nombre_cliente = st.text_input("Nombre del Cliente")
@@ -120,28 +121,26 @@ def generar_proforma(db):
             buffer.seek(0)
 
             st.download_button(label="📥 Descargar Proforma", data=buffer, file_name="proforma.pdf", mime="application/pdf")
+
+        # ✅ Enviar por WhatsApp (fuera del botón de guardar)
+        st.subheader("📤 Enviar Proforma por WhatsApp")
+        numero_whatsapp = st.text_input("Número de WhatsApp del cliente (ej. 5917XXXXXXX)", key="whatsapp_cliente")
+
+        if numero_whatsapp:
+            mensaje = f"📝 *Proforma Aqualaars*\n"
+            mensaje += f"👤 Cliente: {nombre_cliente}\n🆔 CI/NIT: {ci_nit}\n📅 Emisión: {fecha_actual.strftime('%Y-%m-%d')}\n📅 Vencimiento: {fecha_vencimiento.strftime('%Y-%m-%d')}\n\n"
+            mensaje += "📦 Productos:\n"
+            for item in st.session_state.productos_lista:
+                mensaje += f"- {item['Nombre']} x{item['Cantidad']} = {item['Precio Total BOB']} Bs\n"
+            mensaje += f"\n💰 *Total: {round(total_proforma, 2)} Bs*"
+
+            if st.button("📲 Enviar por WhatsApp"):
+                mensaje_codificado = urllib.parse.quote(mensaje)
+                enlace = f"https://wa.me/{numero_whatsapp}?text={mensaje_codificado}"
+                st.markdown(f"[Abrir WhatsApp]({enlace})", unsafe_allow_html=True)
+
     else:
         st.warning("No se han agregado productos a la proforma.")
-
-    import urllib.parse
-
-    st.subheader("📤 Enviar Proforma por WhatsApp")
-    
-    numero_whatsapp = st.text_input("Número de WhatsApp del cliente (ej. 5917XXXXXXX)", key="whatsapp_cliente")
-    
-    # Generar mensaje resumido
-    mensaje = f"📝 *Proforma Aqualaars*\n"
-    mensaje += f"👤 Cliente: {nombre_cliente}\n🆔 CI/NIT: {ci_nit}\n📅 Emisión: {fecha_actual.strftime('%Y-%m-%d')}\n📅 Vencimiento: {fecha_vencimiento.strftime('%Y-%m-%d')}\n\n"
-    mensaje += "📦 Productos:\n"
-    for item in st.session_state.productos_lista:
-        mensaje += f"- {item['Nombre']} x{item['Cantidad']} = {item['Precio Total BOB']} Bs\n"
-    mensaje += f"\n💰 *Total: {round(total_proforma, 2)} Bs*"
-    
-    # Botón para abrir WhatsApp
-    if numero_whatsapp and st.button("📲 Enviar por WhatsApp"):
-        mensaje_codificado = urllib.parse.quote(mensaje)
-        enlace = f"https://wa.me/{numero_whatsapp}?text={mensaje_codificado}"
-        st.markdown(f"[Abrir WhatsApp]({enlace})", unsafe_allow_html=True)
 
     if st.button("🆕 Nueva Proforma"):
         st.session_state.nombre_cliente = ""
