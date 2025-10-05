@@ -1,15 +1,14 @@
+# proforma.py
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import io
-import urllib.parse
 from datetime import datetime, timedelta
 
 def generar_proforma(db):
     if "rol" not in st.session_state or st.session_state.rol not in ["admin", "user"]:
         st.warning("⚠️ No tienes permisos para acceder a esta sección.")
         st.stop()
-
     st.header("📝 Generar Proforma")
 
     nombre_cliente = st.text_input("Nombre del Cliente")
@@ -98,7 +97,7 @@ def generar_proforma(db):
             db.collection("proformas").document(proforma_id).set(proforma_data)
             st.success(f"✅ La proforma ha sido guardada en Firebase con ID: {proforma_id}")
 
-            fig, ax = plt.subplots(figsize=(10, 6))
+            fig, ax = plt.subplots(figsize=(8.5, 11))
             ax.set_title("Proforma", fontsize=24, fontweight="bold")
             ax.text(0.5, 0.5, "Aqualaars", font="Arial", fontweight="bold", fontsize=90, color="#00BFFF", alpha=0.2, ha="center", va="center", transform=ax.transAxes)
             ax.text(0.64, 0.36, "Todo para su piscina", font="Arial",fontweight="bold" , fontsize=30, color="#00BFFF",alpha=0.2, ha="center", va="center", transform=ax.transAxes)
@@ -121,24 +120,6 @@ def generar_proforma(db):
             buffer.seek(0)
 
             st.download_button(label="📥 Descargar Proforma", data=buffer, file_name="proforma.pdf", mime="application/pdf")
-
-        # ✅ Enviar por WhatsApp (fuera del botón de guardar)
-        st.subheader("📤 Enviar Proforma por WhatsApp")
-        numero_whatsapp = st.text_input("Número de WhatsApp del cliente (ej. 5917XXXXXXX)", key="whatsapp_cliente")
-
-        if numero_whatsapp:
-            mensaje = f"📝 *Proforma Aqualaars*\n"
-            mensaje += f"👤 Cliente: {nombre_cliente}\n🆔 CI/NIT: {ci_nit}\n📅 Emisión: {fecha_actual.strftime('%Y-%m-%d')}\n📅 Vencimiento: {fecha_vencimiento.strftime('%Y-%m-%d')}\n\n"
-            mensaje += "📦 Productos:\n"
-            for item in st.session_state.productos_lista:
-                mensaje += f"- {item['Nombre']} x{item['Cantidad']} = {item['Precio Total BOB']} Bs\n"
-            mensaje += f"\n💰 *Total: {round(total_proforma, 2)} Bs*"
-
-            if st.button("📲 Enviar por WhatsApp"):
-                mensaje_codificado = urllib.parse.quote(mensaje)
-                enlace = f"https://wa.me/{numero_whatsapp}?text={mensaje_codificado}"
-                st.markdown(f"[Abrir WhatsApp]({enlace})", unsafe_allow_html=True)
-
     else:
         st.warning("No se han agregado productos a la proforma.")
 
