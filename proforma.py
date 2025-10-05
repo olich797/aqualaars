@@ -104,13 +104,13 @@ def generar_proforma(db):
             # Marca de agua
             ax.text(0.5, 0.5, "Aqualaars", font="Arial", fontweight="bold", fontsize=90,
                     color="#00BFFF", alpha=0.2, ha="center", va="center", transform=ax.transAxes)
-            ax.text(0.64, 0.30, "Todo para su piscina", font="Arial", fontweight="bold", fontsize=30,
+            ax.text(0.60, 0.20, "Todo para su piscina", font="Arial", fontweight="bold", fontsize=30,
                     color="#00BFFF", alpha=0.2, ha="center", va="center", transform=ax.transAxes)
 
             # Datos del cliente (más compactos)
             ax.text(0, 0.85, f"Nombre: {nombre_cliente}         CI/NIT: {ci_nit}", fontsize=12)
-            ax.text(0, 0.81, f"Fecha emisión: {fecha_actual.strftime('%Y-%m-%d')}", fontsize=12)
-            ax.text(0, 0.77, f"Fecha vencimiento: {fecha_vencimiento.strftime('%Y-%m-%d')}", fontsize=12)
+            ax.text(0, 0.83, f"Fecha emisión: {fecha_actual.strftime('%Y-%m-%d')}", fontsize=12)
+            ax.text(0, 0.81, f"Fecha vencimiento: {fecha_vencimiento.strftime('%Y-%m-%d')}", fontsize=12)
 
             col_labels = ["Producto", "Cantidad", "Precio Unitario BOB", "Precio Total BOB"]
             table_data = [[item["Nombre"], item["Cantidad"], item["Precio Unitario BOB"], item["Precio Total BOB"]] for item in st.session_state.productos_lista]
