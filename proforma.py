@@ -117,8 +117,8 @@ def generar_proforma(db):
             tabla = ax.table(cellText=table_data, colLabels=col_labels, cellLoc="center", loc="center", colWidths=[0.50, 0.13, 0.18, 0.18])
             tabla.auto_set_font_size(False)
             tabla.set_fontsize(10)
-            tabla.scale(1.2, 1.2)
-            ax.text(0, -0.02, f"Total: {round(total_proforma, 2)} BOB", fontsize=14, fontweight="bold")
+            tabla.scale(1, 0.9)
+            ax.text(0, 0.7, f"Total: {round(total_proforma, 2)} BOB", fontsize=14, fontweight="bold")
             ax.axis("off")
             st.pyplot(fig)
 
