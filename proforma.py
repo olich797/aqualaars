@@ -97,7 +97,7 @@ def generar_proforma(db):
             db.collection("proformas").document(proforma_id).set(proforma_data)
             st.success(f"✅ La proforma ha sido guardada en Firebase con ID: {proforma_id}")
 
-            fig, ax = plt.subplots(figsize=(7.5, 9))  # Carta vertical
+            fig, ax = plt.subplots(figsize=(7.5, 8.7))  # Carta vertical
 
             ax.set_title("Proforma", fontsize=22, fontweight="bold", pad=10)
 
@@ -108,17 +108,17 @@ def generar_proforma(db):
                     color="#00BFFF", alpha=0.2, ha="center", va="center", transform=ax.transAxes)
 
             # Datos del cliente (más compactos)
-            ax.text(0, 0.85, f"Nombre: {nombre_cliente}         CI/NIT: {ci_nit}", fontsize=10)
-            ax.text(0, 0.82, f"Fecha emisión: {fecha_actual.strftime('%Y-%m-%d')}", fontsize=10)
-            ax.text(0, 0.79, f"Fecha vencimiento: {fecha_vencimiento.strftime('%Y-%m-%d')}", fontsize=10)
+            ax.text(0, 0.90, f"Nombre: {nombre_cliente}         CI/NIT: {ci_nit}", fontsize=10)
+            ax.text(0, 0.87, f"Fecha emisión: {fecha_actual.strftime('%Y-%m-%d')}", fontsize=10)
+            ax.text(0, 0.84, f"Fecha vencimiento: {fecha_vencimiento.strftime('%Y-%m-%d')}", fontsize=10)
 
             col_labels = ["Producto", "Cantidad", "Precio Unitario BOB", "Precio Total BOB"]
             table_data = [[item["Nombre"], item["Cantidad"], item["Precio Unitario BOB"], item["Precio Total BOB"]] for item in st.session_state.productos_lista]
             tabla = ax.table(cellText=table_data, colLabels=col_labels, cellLoc="center", loc="center", colWidths=[0.50, 0.13, 0.18, 0.18])
             tabla.auto_set_font_size(False)
-            tabla.set_fontsize(9)
+            tabla.set_fontsize(8)
             tabla.scale(1.2, 1.2)
-            ax.text(0, 0.28, f"Total: {round(total_proforma, 2)} BOB", fontsize=12, fontweight="bold")
+            ax.text(0, 0.30, f"Total: {round(total_proforma, 2)} BOB", fontsize=12, fontweight="bold")
             ax.axis("off")
             st.pyplot(fig)
 
