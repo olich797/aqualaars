@@ -108,9 +108,9 @@ def generar_proforma(db):
                     color="#00BFFF", alpha=0.2, ha="center", va="center", transform=ax.transAxes)
 
             # Datos del cliente (más compactos)
-            ax.text(0, 0.90, f"Nombre: {nombre_cliente}         CI/NIT: {ci_nit}", fontsize=12)
-            ax.text(0, 0.87, f"Fecha emisión: {fecha_actual.strftime('%Y-%m-%d')}", fontsize=12)
-            ax.text(0, 0.84, f"Fecha vencimiento: {fecha_vencimiento.strftime('%Y-%m-%d')}", fontsize=12)
+            ax.text(0, 0.85, f"Nombre: {nombre_cliente}         CI/NIT: {ci_nit}", fontsize=12)
+            ax.text(0, 0.82, f"Fecha emisión: {fecha_actual.strftime('%Y-%m-%d')}", fontsize=12)
+            ax.text(0, 0.79, f"Fecha vencimiento: {fecha_vencimiento.strftime('%Y-%m-%d')}", fontsize=12)
 
             col_labels = ["Producto", "Cantidad", "Precio Unitario BOB", "Precio Total BOB"]
             table_data = [[item["Nombre"], item["Cantidad"], item["Precio Unitario BOB"], item["Precio Total BOB"]] for item in st.session_state.productos_lista]
@@ -118,7 +118,7 @@ def generar_proforma(db):
             tabla.auto_set_font_size(False)
             tabla.set_fontsize(10)
             tabla.scale(1.2, 1.2)
-            ax.text(0, 0.30, f"Total: {round(total_proforma, 2)} BOB", fontsize=14, fontweight="bold")
+            ax.text(0, 0.28, f"Total: {round(total_proforma, 2)} BOB", fontsize=14, fontweight="bold")
             ax.axis("off")
             st.pyplot(fig)
 
