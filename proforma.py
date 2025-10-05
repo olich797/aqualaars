@@ -97,9 +97,9 @@ def generar_proforma(db):
             db.collection("proformas").document(proforma_id).set(proforma_data)
             st.success(f"✅ La proforma ha sido guardada en Firebase con ID: {proforma_id}")
 
-            fig, ax = plt.subplots(figsize=(7.5, 8))  # Carta vertical
+            fig, ax = plt.subplots(figsize=(7.5, 7))  # Carta vertical
 
-            ax.set_title("Proforma", fontsize=22, fontweight="bold", pad=10)
+            ax.set_title("Proforma", fontsize=20, fontweight="bold", pad=10)
 
             # Marca de agua
             ax.text(0.5, 0.5, "Aqualaars", font="Arial", fontweight="bold", fontsize=80,
