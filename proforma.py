@@ -114,7 +114,7 @@ def generar_proforma(db):
 
             col_labels = ["Producto", "Cantidad", "Precio Unitario BOB", "Precio Total BOB"]
             table_data = [[item["Nombre"], item["Cantidad"], item["Precio Unitario BOB"], item["Precio Total BOB"]] for item in st.session_state.productos_lista]
-            tabla = ax.table(cellText=table_data, colLabels=col_labels, cellLoc="center", loc="center", colWidths=[0.50, 0.13, 0.18, 0.18])
+            tabla = ax.table(cellText=table_data, colLabels=col_labels, cellLoc="center", loc="upper center", colWidths=[0.50, 0.13, 0.18, 0.18])
             tabla.auto_set_font_size(False)
             tabla.set_fontsize(10)
             tabla.scale(1.2, 1.2)
